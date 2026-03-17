@@ -20,7 +20,7 @@ export default function ProjectsPage(){
   return(
     <div>
 
-      <h1>Pomodoro Projects</h1>
+      <h1>Pomodoro Projects from Watch</h1>
 
       <button onClick={() => setEditing(true)}>
         New Project

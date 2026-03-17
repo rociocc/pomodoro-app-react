@@ -1,0 +1,27 @@
+# =======================================
+# Stage 1: Build the React.js application
+# =======================================
+
+ARG NODE_VERSION=24.14.0-alpine
+
+################################################################################
+# Use node image for base image for all stages.
+FROM node:${NODE_VERSION} AS dev
+
+# Set working directory for all build stages.
+WORKDIR /app
+
+# Copy package related files first to leverage docker's caching mechanism. Building is made layer by layer, so files that are less likely to change should be copied first so they don't need to be copied every time the image is built
+COPY package.json package-lock.json* ./
+
+# Install project dependencies using npm install for dev
+RUN --mount=type=cache,target=/root/.npm npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the port configured for Vite (vite.config.ts)
+EXPOSE 3000
+
+# Use a default command that can be overriden in Docker compose.yml file
+CMD ["npm", "run", "dev"]
